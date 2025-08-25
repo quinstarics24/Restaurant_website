@@ -155,6 +155,139 @@
             font-size: 2rem;
         }
 
+        /* Services Section */
+        .services {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f8f5f2 0%, #ede4d3 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .services::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(212, 165, 116, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .services::after {
+            content: '';
+            position: absolute;
+            bottom: 10%;
+            right: -15%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 107, 53, 0.06) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 25px;
+            padding: 3rem 2rem;
+            text-align: center;
+            height: 100%;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(212, 165, 116, 0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 30%, rgba(212, 165, 116, 0.03) 50%, transparent 70%);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+            transform: rotate(45deg) translate(20%, 20%);
+        }
+
+        .service-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            border-color: var(--primary-color);
+        }
+
+        .service-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--accent-color), #ff8c42);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            color: white;
+            font-size: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .service-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .service-description {
+            color: var(--text-dark);
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .service-highlight {
+            background: linear-gradient(90deg, var(--accent-color), #ff8c42);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .delivery-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 3;
+        }
+
         /* About Section */
         .about {
             padding: 80px 0;
@@ -335,8 +468,19 @@
                 padding: 100px 0 60px;
             }
             
-            .features, .about, .gallery-preview {
+            .features, .services, .about, .gallery-preview {
                 padding: 60px 0;
+            }
+
+            .service-card {
+                padding: 2rem 1.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .service-icon {
+                width: 80px;
+                height: 80px;
+                font-size: 2rem;
             }
         }
 
@@ -431,13 +575,70 @@
         </div>
     </section>
 
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <div class="row text-center mb-5">
+                <div class="col-12">
+                    <h2 class="font-heading mb-3">Our Services</h2>
+                    <p class="lead">Bringing authentic flavors to you, wherever you are in Yaoundé</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="service-card">
+                        <div class="delivery-badge">Available</div>
+                        <div class="service-icon">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <h4 class="service-title font-heading">Custom Catering</h4>
+                        <p class="service-description">
+                            We cook on command for all your special needs — parties, occasions, events, and more.
+                            Freshly prepared meals tailored to your taste and theme.
+                        </p>
+                        <div class="service-highlight">
+                            <i class="fas fa-clock me-1"></i>On Demand
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="service-card">
+                        <div class="delivery-badge">Hot & Fresh</div>
+                        <div class="service-icon">
+                            <i class="fas fa-motorcycle"></i>
+                        </div>
+                        <h4 class="service-title font-heading">Home Delivery</h4>
+                        <p class="service-description">We deliver fresh, hot meals throughout Yaoundé! Order your favorite dishes and enjoy them in the comfort of your home or office.</p>
+                        <div class="service-highlight">
+                            <i class="fas fa-map-marker-alt me-1"></i>All Yaoundé Areas
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="service-card">
+                        <div class="delivery-badge">Quick Service</div>
+                        <div class="service-icon">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <h4 class="service-title font-heading">Takeaway Orders</h4>
+                        <p class="service-description">Perfect for busy schedules! Call ahead to place your order and pick up fresh, ready-to-eat meals without the wait.</p>
+                        <div class="service-highlight">
+                            <i class="fas fa-phone me-1"></i>Call & Collect
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
     <!-- About Section -->
     <section id="about" class="about">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6 mb-5 mb-lg-0">
                     <div class="about-image-container">
-                        <img src="images/restaurant-interior.jpg" alt="Warm and welcoming interior of Aunty Co's Kitchen" class="img-fluid about-image">
+                        <img src="images/mom.jpg" alt="Warm and welcoming interior of Aunty Co's Kitchen" class="img-fluid about-image">
                         <div class="about-image-overlay">
                             <div class="about-badge">
                                 <i class="fas fa-award"></i>
@@ -534,8 +735,8 @@
         </div>
     </section>
   
-    <?php include 'footer.php'; ?>
-
+   
+ <?php include 'footer.php'; ?>
     <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
     
@@ -557,7 +758,7 @@
         }, observerOptions);
 
         // Observe elements for animation
-        document.querySelectorAll('.feature-card, .about-text, .gallery-item').forEach(el => {
+        document.querySelectorAll('.feature-card, .service-card, .about-text, .gallery-item').forEach(el => {
             el.style.opacity = '0';
             el.style.transform = 'translateY(30px)';
             el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';

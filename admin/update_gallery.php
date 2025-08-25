@@ -1,7 +1,18 @@
 <?php
 // admin/update_gallery.php
-require_once 'db.php';
-requireLogin();
+require_once '../includes/db.php';
+
+// Start session only if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Simple session check
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header("Location: login.php");
+    exit;
+}
+
 
 $message = '';
 $messageType = '';
@@ -134,47 +145,6 @@ try {
             color: #333;
             line-height: 1.6;
         }
-
-        .admin-header {
-            background: linear-gradient(135deg, #d4a574, #b8956a);
-            color: white;
-            padding: 1rem 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-        }
-
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-
-        .admin-nav {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .admin-nav a {
-            color: white;
-            text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            transition: background 0.3s ease;
-        }
-
-        .admin-nav a:hover, .admin-nav a.active {
-            background: rgba(255,255,255,0.2);
-        }
-
         .main-content {
             max-width: 1200px;
             margin: 0 auto;
@@ -440,16 +410,7 @@ try {
         }
 
         @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .admin-nav {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
+        
             .view-tabs {
                 flex-direction: column;
                 align-items: center;
@@ -466,21 +427,8 @@ try {
     </style>
 </head>
 <body>
-    <header class="admin-header">
-        <div class="header-content">
-            <div class="logo">
-                <i class="fas fa-utensils"></i> AUNTY CO'S KITCHEN Admin
-            </div>
-            <nav class="admin-nav">
-                <a href="dashboard.php"><i class="fas fa-home"></i> Dashboard</a>
-                <a href="update_menu.php"><i class="fas fa-utensils"></i> Update Menu</a>
-                <a href="update_gallery.php" class="active"><i class="fas fa-images"></i> Gallery</a>
-                <a href="view_reservations.php"><i class="fas fa-calendar"></i> Reservations</a>
-                <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
-            </nav>
-        </div>
-    </header>
-
+     <?php include 'header.php'; ?>
+     
     <main class="main-content">
         <div class="page-header">
             <h1><i class="fas fa-images"></i> Gallery Management</h1>

@@ -4,419 +4,425 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery - AUNTY CO'S KITCHEN</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --primary-color: #d4a574;
+            --secondary-color: #8b4513;
+            --accent-color: #ff6b35;
+            --dark-color: #2c1810;
+            --light-color: #f8f5f2;
+            --text-dark: #333;
+        }
+
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
         }
 
         body {
-            font-family: 'Open Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             line-height: 1.6;
-            color: #333;
-            background-color: #fafafa;
+            color: var(--text-dark);
+            background: #fafafa;
         }
 
-        /* Main Content */
-        main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 90px 30px;
-        }
-
-        .gallery-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .gallery-header h1 {
+        .font-heading {
             font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            color: #d4a574;
-            margin-bottom: 15px;
         }
 
-        .gallery-header p {
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--light-color) 0%, #d19d69ff 100%);
+            padding: 120px 0 60px;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
             font-size: 1.1rem;
-            color: #666;
-            max-width: 700px;
-            margin: 0 auto 20px;
+            color: var(--text-dark);
+            opacity: 0.8;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
-        /* Special Info Banner */
-        .special-info {
-            background: linear-gradient(135deg, #fff3e0, #f5f5f5);
-            border-left: 5px solid #d4a574;
-            padding: 25px 30px;
-            margin-bottom: 40px;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        /* Gallery Section */
+        .gallery-section {
+            padding: 80px 0;
         }
 
-        .special-info h3 {
-            font-family: 'Playfair Display', serif;
-            color: #d4a574;
-            font-size: 1.3rem;
-            margin-bottom: 10px;
-        }
-
-        .special-info p {
-            color: #555;
-            margin-bottom: 8px;
-        }
-
-        .special-info .highlight {
-            font-weight: 600;
-            color: #d4a574;
-        }
-
-        /* Categories */
-        .gallery-categories {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .category-btn {
-            background: white;
-            border: 2px solid #d4a574;
-            color: #d4a574;
-            padding: 12px 30px;
-            margin: 8px;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            font-size: 1rem;
-        }
-
-        .category-btn:hover,
-        .category-btn.active {
-            background: #d4a574;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(212, 165, 116, 0.3);
-        }
-
-        /* Gallery Grid */
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
         }
 
         .gallery-item {
             position: relative;
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
             cursor: pointer;
+            background: white;
         }
 
         .gallery-item:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
         }
 
-        .gallery-item img {
+        .gallery-image {
             width: 100%;
             height: 280px;
             object-fit: cover;
-            transition: transform 0.3s ease;
+            transition: all 0.4s ease;
         }
 
-        .gallery-item:hover img {
-            transform: scale(1.05);
+        .gallery-item:hover .gallery-image {
+            transform: scale(1.1);
         }
 
-        .gallery-caption {
+        .gallery-overlay {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
             background: linear-gradient(transparent, rgba(0,0,0,0.8));
             color: white;
-            padding: 40px 25px 25px;
+            padding: 2rem 1.5rem 1.5rem;
             transform: translateY(100%);
-            transition: transform 0.3s ease;
+            transition: all 0.4s ease;
         }
 
-        .gallery-item:hover .gallery-caption {
+        .gallery-item:hover .gallery-overlay {
             transform: translateY(0);
         }
 
-        .gallery-caption h3 {
+        .dish-name {
             font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
-            margin-bottom: 8px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
         }
 
-        .gallery-caption p {
-            font-size: 0.95rem;
+        .dish-description {
+            font-size: 0.9rem;
             opacity: 0.9;
-            line-height: 1.4;
+            margin: 0;
         }
 
-        /* Category badges */
-        .category-badge {
+        /* Featured Section */
+        .featured-section {
+            background: white;
+            padding: 60px 0;
+            margin-top: 40px;
+            border-radius: 30px 30px 0 0;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
+        }
+
+        .featured-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .featured-title h3 {
+            font-size: 2.2rem;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .featured-title p {
+            color: var(--text-dark);
+            opacity: 0.7;
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .featured-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            height: 200px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .featured-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .featured-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .featured-badge {
             position: absolute;
             top: 15px;
             right: 15px;
-            background: rgba(212, 165, 116, 0.9);
+            background: var(--accent-color);
             color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
+            padding: 8px 15px;
+            border-radius: 25px;
             font-size: 0.8rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
-        /* Mobile Responsiveness */
+        /* CTA Section */
+        .gallery-cta {
+            background: var(--secondary-color);
+            color: white;
+            padding: 50px 0;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-light {
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-light:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
         @media (max-width: 768px) {
-            main {
-                padding: 60px 20px;
+            .page-header h1 {
+                font-size: 2.2rem;
             }
-
-            .gallery-header h1 {
-                font-size: 2rem;
-            }
-
+            
             .gallery-grid {
                 grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                gap: 25px;
+                gap: 1.5rem;
             }
-
-            .gallery-item img {
-                height: 220px;
-            }
-
-            .category-btn {
-                padding: 10px 20px;
-                margin: 5px;
-                font-size: 0.9rem;
-            }
-
-            .special-info {
-                padding: 20px;
-                margin: 0 10px 30px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            main {
-                padding: 40px 15px;
-            }
-
-            .gallery-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .gallery-categories {
-                margin-bottom: 30px;
-            }
-
-            .category-btn {
-                display: block;
-                width: 100%;
-                margin: 8px 0;
+            
+            .gallery-section {
+                padding: 60px 0;
             }
         }
     </style>
 </head>
 <body>
-      <?php include 'header.php'; ?>
+     <?php include 'header.php'; ?>
 
-    <main>
-        <div class="gallery-header">
-            <h1>Our Culinary Gallery</h1>
-            <p>Discover our three special daily meals and exceptional catering services for your memorable occasions</p>
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 class="font-heading">Food Gallery</h1>
+            <p>A visual feast of our delicious homemade dishes crafted with love and authentic flavors</p>
         </div>
+    </section>
 
-        <div class="special-info">
-            <h3><i class="fas fa-star"></i> What Makes Us Special</h3>
-            <p><span class="highlight">3 Special Meals Daily:</span> We craft three unique, special meals each day using the freshest ingredients</p>
-            <p><span class="highlight">Event Catering:</span> Perfect for parties, birthdays, anniversaries, and special celebrations</p>
-            <p><span class="highlight">Custom Menus:</span> Tailored dining experiences for your special occasions</p>
-        </div>
+    <!-- Main Gallery Section -->
+    <section class="gallery-section">
+        <div class="container">
+            <div class="gallery-grid">
+                <!-- Gallery Item 1 -->
 
-        <div class="gallery-categories">
-            <button class="category-btn active" data-category="all">All Dishes</button>
-            <button class="category-btn" data-category="daily-specials">Daily Specials</button>
-            <button class="category-btn" data-category="party-catering">Party Catering</button>
-            <button class="category-btn" data-category="celebration">Celebrations</button>
-            <button class="category-btn" data-category="drinks">Beverages</button>
-            <button class="category-btn" data-category="restaurant">Our Space</button>
-        </div>
-
-        <div class="gallery-grid" id="galleryGrid">
-            <!-- Daily Specials -->
-            <div class="gallery-item" data-category="daily-specials">
-                <div class="category-badge">Daily Special</div>
-                <img src="images/eru.jpg" alt="waterfufu and eru">
-                <div class="gallery-caption">
-                    <h3>Waterfufu & Eru</h3>
-                    <p>A flavorful Cameroonian classic made with finely shredded eru leaves, waterleaf, crayfish, smoked meat, and palm oil — served with soft waterfufu for a rich and satisfying experience.</p>
+                <div class="gallery-item">
+                    <img src="images/achu.png" alt="Achu and Yellow Soup" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h4 class="dish-name">Achu and Yellow Soup</h4>
+                        <p class="dish-description">A traditional dish featuring smooth achu served with a rich and flavorful yellow soup.</p>
+                    </div>
                 </div>
+                
+                <!-- Gallery Item 2 -->
+                <div class="gallery-item">
+                    <img src="images/sanga.jpg" alt="Sanga Traditional Meal" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h4 class="dish-name">Sanga Traditional Meal</h4>
+                        <p class="dish-description">A delightful assortment of traditional Sanga dishes, showcasing rich flavors? and local ingredients.</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 3 -->
+                <div class="gallery-item">
+                    <img src="images/ko.jpg" alt="Okok" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h4 class="dish-name">Okok</h4>
+                        <p class="dish-description">A flavorful dish made with leafy greens, spices, and served with a side of starchy accompaniments.</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 4 -->
+                <div class="gallery-item">
+                    <img src="images/Ekwang.jpg" alt="Ekwang" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h4 class="dish-name">Ekwang</h4>
+                        <p class="dish-description">A delicious dish made from grated cocoyam, cooked with spices and served in a rich vegetable sauce.</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 5 -->
+                <div class="gallery-item">
+                    <img src="images/fufu.jpg" alt="Fufu Corn and Vegetable, Kati Kati" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h4 class="dish-name">Fufu Corn and Vegetable, Khati Khati</h4>
+                        <p class="dish-description">A hearty meal featuring smooth fufu corn paired with vibrant vegetables and grilled kati kati chicken.</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 6 -->
+                <div class="gallery-item">
+                    <img src="images/egg.jpg" alt="Soup and Ripe Plantain" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h4 class="dish-name">Egg Soup and Ripe Plantain</h4>
+                        <p class="dish-description">A comforting dish featuring rich egg soup served with sweet, ripe plantains.</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 7 -->
+                <div class="gallery-item">
+                    <img src="images/coco.png" alt="Porrished Cocoyams and Dry Meat" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h4 class="dish-name">Porrished Cocoyams and Dry Meat</h4>
+                        <p class="dish-description">A savory dish of porridged cocoyams served with tender pieces of dry meat for a hearty meal.</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 8 -->
+                <div class="gallery-item">
+                    <img src="images/ndole.png" alt="Ndole" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h4 class="dish-name">Ndole</h4>
+                        <p class="dish-description">A flavorful dish made with bitter leaves, groundnuts, and tender meat, offering a unique taste of tradition.</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 9 -->
+                <div class="gallery-item">
+                    <img src="images/rice.jpg" alt="Fried Rice and Chicken" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h4 class="dish-name">Fried Rice and Chicken</h4>
+                        <p class="dish-description">Delicious fried rice served with tender, seasoned chicken</p>
+                    </div>
+                </div>
+
             </div>
 
-            <div class="gallery-item" data-category="daily-specials">
-                <div class="category-badge">Daily Special</div>
-                <img src="images/eru.jpg" alt="waterfufu and eru">
-                <div class="gallery-caption">
-                    <h3>Fried Rice & Chicken</h3>
-                    <p>Deliciously spiced Cameroonian-style fried rice served with well-marinated grilled or fried chicken — a flavorful favorite for any occasion.</p>
+            <!-- Featured Dishes Section -->
+            <div class="featured-section">
+                <div class="featured-title">
+                    <h3 class="font-heading">Chef's Favorites</h3>
+                    <p>Our most popular dishes that keep customers coming back</p>
                 </div>
-            </div>
-
-            <div class="gallery-item" data-category="daily-specials">
-                <div class="category-badge">Daily Special</div>
-                 <img src="images/eru.jpg" alt="waterfufu and eru">
-                <div class="gallery-caption">
-                    <h3>Signature Jollof Rice</h3>
-                    <p>Our special recipe jollof rice with tender chicken and fresh vegetables</p>
-                </div>
-            </div>
-
-            <!-- Party Catering -->
-            <div class="gallery-item" data-category="party-catering">
-                <div class="category-badge">Catering</div>
-                <img src="images/eru.jpg" alt="waterfufu and eru">
-                <div class="gallery-caption">
-                    <h3>Grand Party Platter</h3>
-                    <p>Perfect for large gatherings - an assortment of our best dishes for 20+ guests</p>
-                </div>
-            </div>
-
-            <div class="gallery-item" data-category="party-catering">
-                <div class="category-badge">Catering</div>
-                 <img src="images/eru.jpg" alt="waterfufu and eru">
-                <div class="gallery-caption">
-                    <h3>Buffet Catering</h3>
-                    <p>Full buffet setup for corporate events, weddings, and large celebrations</p>
-                </div>
-            </div>
-
-            <!-- Celebration Specials -->
-            <div class="gallery-item" data-category="celebration">
-                <div class="category-badge">Celebration</div>
-                <img src="images/eru.jpg" alt="waterfufu and eru">
-                <div class="gallery-caption">
-                    <h3>Birthday Celebrations</h3>
-                    <p>Custom birthday cakes and special celebration meals for your special day</p>
-                </div>
-            </div>
-
-            <div class="gallery-item" data-category="celebration">
-                <div class="category-badge">Celebration</div>
-               <img src="images/eru.jpg" alt="waterfufu and eru">
-                <div class="gallery-caption">
-                    <h3>Anniversary Dinners</h3>
-                    <p>Romantic anniversary packages with candlelit dinners and special decorations</p>
-                </div>
-            </div>
-
-            <!-- Beverages -->
-            <div class="gallery-item" data-category="drinks">
-                <div class="category-badge">Beverages</div>
-                <img src="images/eru.jpg" alt="waterfufu and eru">
-                <div class="gallery-caption">
-                    <h3>Fresh Tropical Juices</h3>
-                    <p>Freshly squeezed mango, pineapple, and passion fruit juices</p>
-                </div>
-            </div>
-
-            <div class="gallery-item" data-category="drinks">
-                <div class="category-badge">Beverages</div>
-                 <img src="images/eru.jpg" alt="waterfufu and eru">
-                <div class="gallery-caption">
-                    <h3>Premium Coffee</h3>
-                    <p>Locally sourced Cameroon coffee beans, expertly roasted and brewed</p>
-                </div>
-            </div>
-
-            <!-- Restaurant Space -->
-            <div class="gallery-item" data-category="restaurant">
-                <div class="category-badge">Our Space</div>
-                <img src="images/eru.jpg" alt="waterfufu and eru">
-                <div class="gallery-caption">
-                    <h3>Elegant Dining Area</h3>
-                    <p>Comfortable and elegant dining space perfect for intimate meals and celebrations</p>
-                </div>
-            </div>
-
-            <div class="gallery-item" data-category="restaurant">
-                <div class="category-badge">Our Space</div>
-                 <img src="images/eru.jpg" alt="waterfufu and eru">
-                <div class="gallery-caption">
-                    <h3>Our Professional Kitchen</h3>
-                    <p>State-of-the-art kitchen where our daily specials and catering orders come to life</p>
-                </div>
-            </div>
-
-            <div class="gallery-item" data-category="restaurant">
-                <div class="category-badge">Our Space</div>
-               <img src="images/eru.jpg" alt="waterfufu and eru">
-                <div class="gallery-caption">
-                    <h3>Private Event Space</h3>
-                    <p>Dedicated space for birthday parties, anniversaries, and special celebrations</p>
+                <div class="featured-grid">
+                    <div class="featured-item">
+                        <img src="images/beans.jpg" alt="Aunty Co's Signature Dish" class="featured-image">
+                        <div class="featured-badge">Signature</div>
+                    </div>
+                    <div class="featured-item">
+                        <img src="images/ero.jpg" alt="Most Popular Combo" class="featured-image">
+                        <div class="featured-badge">Popular</div>
+                    </div>
+                    <div class="featured-item">
+                        <img src="images/Egusi.png" alt="Daily Special" class="featured-image">
+                        <div class="featured-badge">Special</div>
+                    </div>
+                    <div class="featured-item">
+                        <img src="images/achu.png" alt="Weekend Special" class="featured-image">
+                        <div class="featured-badge">Weekend</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </main>
+    </section>
 
+    <!-- Call to Action -->
+    <section class="gallery-cta">
+        <div class="container">
+            <h3 class="font-heading mb-3">Hungry for More?</h3>
+            <p class="mb-4">Come taste these amazing dishes for yourself!</p>
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <a href="menu.php" class="btn btn-primary btn-lg">
+                    <i class="fas fa-utensils me-2"></i>View Full Menu
+                </a>
+                <a href="reservations.php" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-calendar-alt me-2"></i>Make Reservation
+                </a>
+            </div>
+        </div>
+    </section>
+
+     <?php include 'footer.php'; ?>
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
     
-    <?php include 'footer.php'; ?>
-
     <script>
-        // Gallery filtering functionality
-        const categoryBtns = document.querySelectorAll('.category-btn');
-        const galleryItems = document.querySelectorAll('.gallery-item');
-
-        categoryBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Remove active class from all buttons
-                categoryBtns.forEach(b => b.classList.remove('active'));
-                // Add active class to clicked button
-                btn.classList.add('active');
-
-                const category = btn.dataset.category;
-
-                // Filter gallery items
-                galleryItems.forEach(item => {
-                    if (category === 'all' || item.dataset.category === category) {
-                        item.style.display = 'block';
-                        setTimeout(() => {
-                            item.style.opacity = '1';
-                            item.style.transform = 'scale(1)';
-                        }, 100);
-                    } else {
-                        item.style.opacity = '0';
-                        item.style.transform = 'scale(0.8)';
-                        setTimeout(() => {
-                            item.style.display = 'none';
-                        }, 300);
-                    }
+        // Simple hover effects and smooth animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const galleryItems = document.querySelectorAll('.gallery-item, .featured-item');
+            
+            galleryItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
                 });
             });
         });
 
-        // Initialize gallery items with smooth entrance
-        window.addEventListener('load', () => {
-            galleryItems.forEach((item, index) => {
-                item.style.opacity = '0';
-                item.style.transform = 'translateY(30px)';
-                setTimeout(() => {
-                    item.style.transition = 'all 0.6s ease';
-                    item.style.opacity = '1';
-                    item.style.transform = 'translateY(0)';
-                }, index * 100);
+        // Add stagger animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }, index * 100);
+                }
             });
+        }, observerOptions);
+
+        // Observe gallery items for stagger effect
+        document.querySelectorAll('.gallery-item, .featured-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
         });
     </script>
 </body>

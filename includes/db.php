@@ -118,10 +118,7 @@ function formatDate($date) {
 
 function formatDateTime($datetime) {
     return date('M j, Y g:i A', strtotime($datetime));
-}
-
-// Start session if not already started
-if (session_status() === PHP_SESSION_NONE) {
+} 
     session_start();
-}
+
 ?>

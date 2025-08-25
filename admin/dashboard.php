@@ -1,35 +1,38 @@
 <?php
-// admin/dashboard.php
+session_start();
+
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header("Location: login.php");
+    exit;
+}
+
 require_once '../includes/db.php';
-requireLogin();
+
+// Use admin_username from session
+$adminName = $_SESSION['admin_username'] ?? 'Admin';
 
 // Get dashboard statistics
 try {
-    // Today's meals count
     $mealCountStmt = $pdo->prepare("SELECT COUNT(*) as count FROM daily_meals WHERE meal_date = CURDATE() AND is_active = TRUE");
     $mealCountStmt->execute();
     $todayMealsCount = $mealCountStmt->fetch()['count'];
-    
-    // Recent reservations count
+
     $reservationCountStmt = $pdo->prepare("SELECT COUNT(*) as count FROM reservations WHERE reservation_date >= CURDATE()");
     $reservationCountStmt->execute();
     $upcomingReservations = $reservationCountStmt->fetch()['count'];
-    
-    // Gallery images count
+
     $galleryCountStmt = $pdo->prepare("SELECT COUNT(*) as count FROM gallery_images");
     $galleryCountStmt->execute();
     $galleryImagesCount = $galleryCountStmt->fetch()['count'];
-    
-    // Recent reservations for display
+
     $recentReservationsStmt = $pdo->prepare("SELECT reservation_id, name, phone, guests, reservation_date, reservation_time, status FROM reservations WHERE reservation_date >= CURDATE() ORDER BY created_at DESC LIMIT 5");
     $recentReservationsStmt->execute();
     $recentReservations = $recentReservationsStmt->fetchAll();
-    
-    // Today's meals
+
     $todayMealsStmt = $pdo->prepare("SELECT meal_name, meal_price, meal_order FROM daily_meals WHERE meal_date = CURDATE() AND is_active = TRUE ORDER BY meal_order");
     $todayMealsStmt->execute();
     $todayMeals = $todayMealsStmt->fetchAll();
-    
+
 } catch (PDOException $e) {
     error_log("Dashboard query error: " . $e->getMessage());
     $todayMealsCount = 0;
@@ -39,15 +42,41 @@ try {
     $todayMeals = [];
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - AUNTY CO'S KITCHEN</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Dashboard - AUNTY CO'S KITCHEN</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #d4a574;
+            --primary-dark: #b8956a;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -55,287 +84,514 @@ try {
         }
 
         body {
-            font-family: 'Open Sans', sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-900);
             line-height: 1.6;
+            font-weight: 400;
         }
 
-        .admin-header {
-            background: linear-gradient(135deg, #d4a574, #b8956a);
-            color: white;
-            padding: 1rem 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .header-content {
-            max-width: 1200px;
+        /* Main Content */
+        .main {
+            max-width: 1280px;
             margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
+            padding: 2rem;
         }
 
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-weight: 600;
+        .welcome {
+            margin-bottom: 2rem;
         }
 
-        .admin-nav {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .admin-nav a {
-            color: white;
-            text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            transition: background 0.3s ease;
-        }
-
-        .admin-nav a:hover {
-            background: rgba(255,255,255,0.1);
-        }
-
-        .logout-btn {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-
-        .logout-btn:hover {
-            background: rgba(255,255,255,0.3);
-        }
-
-        .main-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 30px 20px;
-        }
-
-        .welcome-section {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            margin-bottom: 30px;
-        }
-
-        .welcome-section h1 {
-            font-family: 'Playfair Display', serif;
-            color: #d4a574;
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-card .icon {
-            font-size: 3rem;
-            color: #d4a574;
-            margin-bottom: 15px;
-        }
-
-        .stat-card .number {
-            font-size: 2.5rem;
+        .welcome h1 {
+            font-size: 1.875rem;
             font-weight: 700;
-            color: #333;
-            margin-bottom: 5px;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
         }
 
-        .stat-card .label {
-            color: #666;
+        .welcome p {
+            color: var(--gray-600);
             font-size: 1rem;
         }
 
-        .action-grid {
+        /* Stats Grid */
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
 
-        .action-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        .stat-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
         }
 
-        .action-card h3 {
-            font-family: 'Playfair Display', serif;
-            color: #d4a574;
-            font-size: 1.3rem;
-            margin-bottom: 15px;
+        .stat-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
         }
 
-        .action-btn {
-            display: inline-block;
-            background: linear-gradient(135deg, #d4a574, #b8956a);
-            color: white;
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            margin-right: 10px;
-            margin-bottom: 10px;
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
         }
 
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(212, 165, 116, 0.3);
+        .stat-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-600);
         }
 
-        .secondary-btn {
-            background: linear-gradient(135deg, #6c757d, #5a6268);
+        .stat-icon {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 0.375rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
         }
 
-        .recent-section {
+        .stat-icon.meals {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .stat-icon.reservations {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .stat-icon.gallery {
+            background: #ecfdf5;
+            color: #059669;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-change {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--gray-500);
+        }
+
+        /* Content Grid */
+        .content-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 20px;
+            gap: 2rem;
         }
 
-        .recent-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        .content-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
         }
 
-        .recent-card h3 {
-            font-family: 'Playfair Display', serif;
-            color: #d4a574;
-            margin-bottom: 20px;
-            font-size: 1.3rem;
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: between;
         }
 
-        .meal-item, .reservation-item {
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border-left: 4px solid #d4a574;
-        }
-
-        .meal-item:last-child, .reservation-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .meal-name {
+        .card-title {
+            font-size: 1.125rem;
             font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        /* Meals */
+        .meal-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .meal-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: var(--gray-50);
+            border-radius: 0.5rem;
+            border-left: 3px solid var(--primary);
+        }
+
+        .meal-info h4 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .meal-order {
+            font-size: 0.75rem;
+            color: var(--gray-500);
         }
 
         .meal-price {
-            color: #d4a574;
+            font-size: 0.875rem;
             font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Reservations */
+        .reservation-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .reservation-item {
+            padding: 0.75rem;
+            background: var(--gray-50);
+            border-radius: 0.5rem;
+            border-left: 3px solid var(--info);
+        }
+
+        .reservation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
         }
 
         .reservation-name {
+            font-size: 0.875rem;
             font-weight: 600;
-            color: #333;
-        }
-
-        .reservation-details {
-            color: #666;
-            font-size: 0.9rem;
-            margin-top: 5px;
+            color: var(--gray-900);
         }
 
         .status-badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
             text-transform: uppercase;
+            letter-spacing: 0.025em;
         }
 
         .status-pending {
-            background: #fff3cd;
-            color: #856404;
+            background: #fef3c7;
+            color: #92400e;
         }
 
         .status-confirmed {
-            background: #d4edda;
-            color: #155724;
+            background: #d1fae5;
+            color: #065f46;
         }
 
+        .reservation-details {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .reservation-details span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* Empty State */
         .empty-state {
             text-align: center;
-            color: #666;
-            font-style: italic;
-            padding: 20px;
+            padding: 2rem 1rem;
+            color: var(--gray-500);
         }
 
+        .empty-state i {
+            font-size: 2rem;
+            color: var(--gray-300);
+            margin-bottom: 0.75rem;
+        }
+
+        .empty-state p {
+            font-size: 0.875rem;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 0.5rem;
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .action-btn:hover {
+            background: var(--gray-50);
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: var(--shadow);
+            transform: translateY(-1px);
+        }
+
+        .action-btn.primary {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: var(--white);
+        }
+
+        .action-btn.primary:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            color: var(--white);
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 15px;
+    
+            .main {
+                padding: 1rem;
             }
 
-            .admin-nav {
-                flex-wrap: wrap;
-                justify-content: center;
+            .welcome h1 {
+                font-size: 1.5rem;
             }
 
             .stats-grid {
                 grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1rem;
             }
 
-            .action-grid, .recent-section {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .quick-actions {
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-card, .content-card, .action-btn {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
     </style>
 </head>
 <body>
-    <header class="admin-header">
-        <div class="header-content">
-            <div class="logo">
-                <i class="fas fa-utensils"></i> AUNTY CO'S KITCHEN Admin
-            </div>
-            <nav class="admin-nav">
-                <a href="dashboard.php"><i class="fas fa-home"></i> Dashboard</a>
-                <a href="update_menu.php"><i class="fas fa-utensils"></i> Update Menu</a>
-                <a href="update_gallery.php"><i class="fas fa-images"></i> Gallery</a>
-                <a href="view_reservations.php"><i class="fas fa-calendar"></i> Reservations</a>
-                <a href="logout.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
-            </nav>
+     <?php include 'header.php'; ?>
+     
+    <main class="main">
+        <div class="welcome">
+            <h1>Welcome back, <?php echo htmlspecialchars($adminName); ?></h1>
+            <p>Here's what's happening at your restaurant today</p>
         </div>
-    </header>
 
-    <main class="main-content">
-        <div class="welcome-section">
-            <h1>Welcome back, <?php echo htmlspecialchars($_SESSION['admin_username']); ?>!</h1>
-            <p>Manage your restaurant's daily meals, gallery, and reservations from this dashboard.</p>
+        <div class="quick-actions">
+            <a href="update_menu.php" class="action-btn primary">
+                <i class="fas fa-plus"></i>
+                <span>Update Menu</span>
+            </a>
+            <a href="update_gallery.php" class="action-btn">
+                <i class="fas fa-upload"></i>
+                <span>Upload Photos</span>
+            </a>
+            <a href="view_reservations.php" class="action-btn">
+                <i class="fas fa-eye"></i>
+                <span>View Reservations</span>
+            </a>
         </div>
 
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="icon"><i class="fas fa-utensils"></i></div>
-                <div class="number
+                <div class="stat-header">
+                    <div class="stat-title">Today's Meals</div>
+                    <div class="stat-icon meals">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                </div>
+                <div class="stat-value"><?php echo $todayMealsCount; ?><span style="font-size: 1rem; color: var(--gray-500);">/3</span></div>
+                <div class="stat-change"><?php echo $todayMealsCount == 3 ? 'All meals set' : (3 - $todayMealsCount) . ' meals remaining'; ?></div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title">Upcoming Reservations</div>
+                    <div class="stat-icon reservations">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                </div>
+                <div class="stat-value"><?php echo $upcomingReservations; ?></div>
+                <div class="stat-change">Active bookings</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title">Gallery Images</div>
+                    <div class="stat-icon gallery">
+                        <i class="fas fa-images"></i>
+                    </div>
+                </div>
+                <div class="stat-value"><?php echo $galleryImagesCount; ?></div>
+                <div class="stat-change">Total photos</div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="content-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-utensils"></i>
+                        Today's Menu
+                    </h3>
+                </div>
+                <div class="card-content">
+                    <?php if (!empty($todayMeals)): ?>
+                        <div class="meal-list">
+                            <?php foreach ($todayMeals as $meal): ?>
+                                <div class="meal-item">
+                                    <div class="meal-info">
+                                        <h4><?php echo htmlspecialchars($meal['meal_name']); ?></h4>
+                                        <div class="meal-order">Special Meal <?php echo $meal['meal_order']; ?></div>
+                                    </div>
+                                    <div class="meal-price"><?php echo number_format($meal['meal_price'], 0); ?> FCFA</div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <?php if ($todayMealsCount < 3): ?>
+                            <div style="margin-top: 1rem; padding: 0.75rem; background: #fef3c7; border-radius: 0.5rem; border-left: 3px solid #f59e0b;">
+                                <p style="font-size: 0.875rem; color: #92400e; margin: 0;">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <?php echo (3 - $todayMealsCount); ?> more meal(s) needed for today
+                                </p>
+                            </div>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <div class="empty-state">
+                            <i class="fas fa-utensils"></i>
+                            <p>No meals set for today</p>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-calendar-check"></i>
+                        Recent Reservations
+                    </h3>
+                </div>
+                <div class="card-content">
+                    <?php if (!empty($recentReservations)): ?>
+                        <div class="reservation-list">
+                            <?php foreach (array_slice($recentReservations, 0, 5) as $res): ?>
+                                <div class="reservation-item">
+                                    <div class="reservation-header">
+                                        <div class="reservation-name"><?php echo htmlspecialchars($res['name']); ?></div>
+                                        <div class="status-badge status-<?php echo strtolower($res['status']); ?>">
+                                            <?php echo htmlspecialchars(ucfirst($res['status'])); ?>
+                                        </div>
+                                    </div>
+                                    <div class="reservation-details">
+                                        <span><i class="fas fa-users"></i> <?php echo (int)$res['guests']; ?> guests</span>
+                                        <span><i class="fas fa-calendar"></i> <?php echo date('M j', strtotime($res['reservation_date'])); ?></span>
+                                        <span><i class="fas fa-clock"></i> <?php echo date('g:i A', strtotime($res['reservation_time'])); ?></span>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php else: ?>
+                        <div class="empty-state">
+                            <i class="fas fa-calendar"></i>
+                            <p>No recent reservations</p>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Auto-refresh dashboard every 5 minutes
+        setTimeout(() => location.reload(), 300000);
+
+        // Add smooth transitions
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.stat-card, .content-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+
+        // Update time display
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleString('en-US', {
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            const welcomeP = document.querySelector('.welcome p');
+            if (welcomeP && !welcomeP.dataset.timeAdded) {
+                welcomeP.innerHTML += ` • ${timeString}`;
+                welcomeP.dataset.timeAdded = true;
+            }
+        }
+
+        updateTime();
+        setInterval(updateTime, 60000);
+    </script>
+</body>
+</html>
