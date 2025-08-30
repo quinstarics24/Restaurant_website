@@ -1,3 +1,23 @@
+<?php
+// gallery.php
+require_once 'includes/db.php'; // adjust path if needed
+
+try {
+    // Try to fetch images uploaded in the last 7 days
+    $stmt = $pdo->prepare("SELECT * FROM gallery_images WHERE upload_date >= DATE_SUB(CURDATE(), INTERVAL 1 WEEK) ORDER BY created_at DESC");
+    $stmt->execute();
+    $galleryImages = $stmt->fetchAll();
+
+    // If no images uploaded in the last week, fetch the most recent ones
+    if (empty($galleryImages)) {
+        $stmt = $pdo->prepare("SELECT * FROM gallery_images ORDER BY created_at DESC LIMIT 9"); // show latest 9 images
+        $stmt->execute();
+        $galleryImages = $stmt->fetchAll();
+    }
+} catch (PDOException $e) {
+    $galleryImages = [];
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +31,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
+        
     <style>
         :root {
             --primary-color: #d4a574;
@@ -256,91 +276,25 @@
     <section class="gallery-section">
         <div class="container">
             <div class="gallery-grid">
-                <!-- Gallery Item 1 -->
-
-                <div class="gallery-item">
-                    <img src="images/achu.png" alt="Achu and Yellow Soup" class="gallery-image">
-                    <div class="gallery-overlay">
-                        <h4 class="dish-name">Achu and Yellow Soup</h4>
-                        <p class="dish-description">A traditional dish featuring smooth achu served with a rich and flavorful yellow soup.</p>
-                    </div>
-                </div>
-                
-                <!-- Gallery Item 2 -->
-                <div class="gallery-item">
-                    <img src="images/sanga.jpg" alt="Sanga Traditional Meal" class="gallery-image">
-                    <div class="gallery-overlay">
-                        <h4 class="dish-name">Sanga Traditional Meal</h4>
-                        <p class="dish-description">A delightful assortment of traditional Sanga dishes, showcasing rich flavors? and local ingredients.</p>
-                    </div>
-                </div>
-
-                <!-- Gallery Item 3 -->
-                <div class="gallery-item">
-                    <img src="images/ko.jpg" alt="Okok" class="gallery-image">
-                    <div class="gallery-overlay">
-                        <h4 class="dish-name">Okok</h4>
-                        <p class="dish-description">A flavorful dish made with leafy greens, spices, and served with a side of starchy accompaniments.</p>
-                    </div>
-                </div>
-
-                <!-- Gallery Item 4 -->
-                <div class="gallery-item">
-                    <img src="images/Ekwang.jpg" alt="Ekwang" class="gallery-image">
-                    <div class="gallery-overlay">
-                        <h4 class="dish-name">Ekwang</h4>
-                        <p class="dish-description">A delicious dish made from grated cocoyam, cooked with spices and served in a rich vegetable sauce.</p>
-                    </div>
-                </div>
-
-                <!-- Gallery Item 5 -->
-                <div class="gallery-item">
-                    <img src="images/fufu.jpg" alt="Fufu Corn and Vegetable, Kati Kati" class="gallery-image">
-                    <div class="gallery-overlay">
-                        <h4 class="dish-name">Fufu Corn and Vegetable, Khati Khati</h4>
-                        <p class="dish-description">A hearty meal featuring smooth fufu corn paired with vibrant vegetables and grilled kati kati chicken.</p>
-                    </div>
-                </div>
-
-                <!-- Gallery Item 6 -->
-                <div class="gallery-item">
-                    <img src="images/egg.jpg" alt="Soup and Ripe Plantain" class="gallery-image">
-                    <div class="gallery-overlay">
-                        <h4 class="dish-name">Egg Soup and Ripe Plantain</h4>
-                        <p class="dish-description">A comforting dish featuring rich egg soup served with sweet, ripe plantains.</p>
-                    </div>
-                </div>
-
-                <!-- Gallery Item 7 -->
-                <div class="gallery-item">
-                    <img src="images/coco.png" alt="Porrished Cocoyams and Dry Meat" class="gallery-image">
-                    <div class="gallery-overlay">
-                        <h4 class="dish-name">Porrished Cocoyams and Dry Meat</h4>
-                        <p class="dish-description">A savory dish of porridged cocoyams served with tender pieces of dry meat for a hearty meal.</p>
-                    </div>
-                </div>
-
-                <!-- Gallery Item 8 -->
-                <div class="gallery-item">
-                    <img src="images/ndole.png" alt="Ndole" class="gallery-image">
-                    <div class="gallery-overlay">
-                        <h4 class="dish-name">Ndole</h4>
-                        <p class="dish-description">A flavorful dish made with bitter leaves, groundnuts, and tender meat, offering a unique taste of tradition.</p>
-                    </div>
-                </div>
-
-                <!-- Gallery Item 9 -->
-                <div class="gallery-item">
-                    <img src="images/rice.jpg" alt="Fried Rice and Chicken" class="gallery-image">
-                    <div class="gallery-overlay">
-                        <h4 class="dish-name">Fried Rice and Chicken</h4>
-                        <p class="dish-description">Delicious fried rice served with tender, seasoned chicken</p>
-                    </div>
-                </div>
-
+                <?php if (!empty($galleryImages)): ?>
+                    <?php foreach ($galleryImages as $image): ?>
+                        <div class="gallery-item">
+                            <img src="uploads/gallery/<?php echo htmlspecialchars($image['image_filename']); ?>" 
+                                 alt="<?php echo htmlspecialchars($image['image_name']); ?>" class="gallery-image">
+                            <div class="gallery-overlay">
+                                <h4 class="dish-name"><?php echo htmlspecialchars($image['image_name']); ?></h4>
+                                <?php if ($image['image_description']): ?>
+                                    <p class="dish-description"><?php echo htmlspecialchars($image['image_description']); ?></p>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="text-center">No images available. Please check back later.</p>
+                <?php endif; ?>
             </div>
 
-            <!-- Featured Dishes Section -->
+            <!-- Featured Dishes Section (unchanged) -->
             <div class="featured-section">
                 <div class="featured-title">
                     <h3 class="font-heading">Chef's Favorites</h3>
@@ -387,43 +341,5 @@
      <?php include 'footer.php'; ?>
     <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-    
-    <script>
-        // Simple hover effects and smooth animations
-        document.addEventListener('DOMContentLoaded', function() {
-            const galleryItems = document.querySelectorAll('.gallery-item, .featured-item');
-            
-            galleryItems.forEach(item => {
-                item.addEventListener('mouseenter', function() {
-                    this.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-                });
-            });
-        });
-
-        // Add stagger animation on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }, index * 100);
-                }
-            });
-        }, observerOptions);
-
-        // Observe gallery items for stagger effect
-        document.querySelectorAll('.gallery-item, .featured-item').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(el);
-        });
-    </script>
 </body>
 </html>

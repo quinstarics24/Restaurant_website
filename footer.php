@@ -375,6 +375,7 @@
                 <li><a href="menu.php">Menu</a></li> 
                 <li><a href="gallery.php">Gallery</a></li>
                 <li><a href="contact.php">Contact</a></li>
+                 <li><a href="reservations.php">Reservation</a></li>
               </ul>
             </div>
           </div>
