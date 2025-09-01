@@ -3,7 +3,6 @@
 require_once '../includes/db.php'; // include PDO & utility functions
 
 
-
 $message = '';
 $messageType = '';
 $filter = $_GET['filter'] ?? 'all';

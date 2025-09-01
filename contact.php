@@ -150,7 +150,6 @@
                                 <option value="reservation">Reservation Inquiry</option>
                                 <option value="catering">Catering Services</option>
                                 <option value="general">General Question</option>
-                                <option value="feedback">Feedback</option>
                                 <option value="other">Other</option>
                             </select>
                         </div>
