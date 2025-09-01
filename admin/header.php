@@ -3,104 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>header - Admin Dashboard</title>
+    <title>Admin Header - AUNTY CO'S KITCHEN</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
+    <style>
         body {
             font-family: 'Open Sans', sans-serif;
             background-color: #f8f9fa;
             color: #333;
-            line-height: 1.6;
         }
 
         .admin-header {
             background: linear-gradient(135deg, #d4a574, #b8956a);
             color: white;
-            padding: 1rem 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-        }
-
-        .logo {
+        .navbar-brand {
             font-family: 'Playfair Display', serif;
             font-size: 1.5rem;
             font-weight: 600;
+            color: white !important;
         }
 
-        .admin-nav {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .admin-nav a {
-            color: white;
-            text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 5px;
+        .nav-link {
+            color: white !important;
+            font-size: 1rem;
             transition: background 0.3s ease;
+            border-radius: 5px;
         }
 
-        .admin-nav a:hover, .admin-nav a.active {
-            background: rgba(255,255,255,0.2);
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 255, 255, 0.2);
         }
 
-        .main-content {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 30px 20px;
+        .navbar-toggler {
+            border: none;
         }
 
-        .page-header {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            margin-bottom: 30px;
-            text-align: center;
+        .navbar-toggler:focus {
+            outline: none;
+            box-shadow: none;
         }
 
-        .page-header h1 {
-            font-family: 'Playfair Display', serif;
-            color: #d4a574;
-            font-size: 2.2rem;
-            margin-bottom: 10px;
+        .navbar-toggler-icon {
+            color: white;
+            font-size: 1.5rem;
         }
-
-        .page-header p {
-            color: #666;
-            font-size: 1.1rem;
-        }
-</style>
+    </style>
 </head>
 <body>
-    <header class="admin-header">
-        <div class="header-content">
-            <div class="logo">
+
+<header class="admin-header">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid px-3">
+            <a class="navbar-brand" href="#">
                 <i class="fas fa-utensils"></i> AUNTY CO'S KITCHEN Admin
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar">
+                <span class="navbar-toggler-icon">
+                    <i class="fas fa-bars"></i>
+                </span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="adminNavbar">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a href="dashboard.php" class="nav-link"><i class="fas fa-home"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="update_menu.php" class="nav-link active"><i class="fas fa-utensils"></i> Update Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="update_gallery.php" class="nav-link"><i class="fas fa-images"></i> Gallery</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="view_reservations.php" class="nav-link"><i class="fas fa-calendar"></i> Reservations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="../index.php" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </li>
+                </ul>
             </div>
-            <nav class="admin-nav">
-                <a href="dashboard.php"><i class="fas fa-home"></i> Dashboard</a>
-                <a href="update_menu.php" class="active"><i class="fas fa-utensils"></i> Update Menu</a>
-                <a href="update_gallery.php"><i class="fas fa-images"></i> Gallery</a>
-                <a href="view_reservations.php"><i class="fas fa-calendar"></i> Reservations</a>
-                <a href="../index.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
-            </nav>
         </div>
-    </header>
+    </nav>
+</header>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
 </html>

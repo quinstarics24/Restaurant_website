@@ -65,12 +65,15 @@ try {
         }
 
         .page-header h1 {
-            font-size: 3rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
             font-weight: 700;
             color: var(--secondary-color);
-            margin-bottom: 1rem;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
-
+        
         .page-header p {
             font-size: 1.1rem;
             color: var(--text-dark);

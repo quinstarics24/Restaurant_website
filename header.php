@@ -488,7 +488,7 @@
             }, 100);
         });
 
-        // Global function to highlight current page (can be called from other pages)
+        // Global function to highlight current page 
         function highlightCurrentPage(pageName) {
             const navLinks = document.querySelectorAll('.nav-link');
             navLinks.forEach(link => {

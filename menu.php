@@ -27,18 +27,15 @@ if ($result && mysqli_num_rows($result) > 0) {
 
 <section class="hero">
     <div class="container">
-        <h1>Our Daily Menu</h1>
+        <h1>Today's Special Meals</h1>
         <p>Three specially crafted meals available all day at Micah Hotel</p>
+        <p>Each meal is carefully prepared with fresh ingredients and traditional recipes that have been perfected over time. Available throughout the day for your convenience.</p>
     </div>
 </section>
 
 <section class="menu-section">
     <div class="container">
-        <div class="section-title">
-            <h2>Today's Special Meals</h2>
-            <p>Each meal is carefully prepared with fresh ingredients and traditional recipes that have been perfected over time. Available throughout the day for your convenience.</p>
-        </div>
-
+        
         <div class="menu-grid">
             <?php if (!empty($meals)): ?>
                 <?php foreach ($meals as $meal): ?>

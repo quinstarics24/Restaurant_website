@@ -25,17 +25,23 @@
         }
 
         .reservation-header h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            color: #d4a574;
-            margin-bottom: 15px;
+           font-family: 'Playfair Display', serif;
+           font-size: 3.5rem;
+           font-weight: 700;
+           margin-bottom: 20px;
+           letter-spacing: -0.02em;
+           text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+           color:#8b4513;
+           
         }
 
         .reservation-header p {
-            font-size: 1.1rem;
-            color: #666;
-            max-width: 600px;
-            margin: 0 auto 20px;
+        color: #333;
+        font-size: 1.1rem;
+        font-weight: 300;
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto;
         }
 
         .info-banner {
