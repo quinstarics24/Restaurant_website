@@ -20,6 +20,7 @@ if ($result && mysqli_num_rows($result) > 0) {
     <title>Menu - AUNTY CO'S KITCHEN</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="css/menu.css">
 </head>
 <body>

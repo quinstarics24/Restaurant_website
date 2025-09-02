@@ -6,7 +6,7 @@
     <title>AUNTY CO'S KITCHEN - Home Cooked Meals with Love</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     
@@ -225,7 +225,7 @@
     <!-- Call to Action -->
     <section class="cta">
         <div class="cta-background">
-            <img src="images/restaurant-atmosphere.jpg" alt="Cozy dining atmosphere at Aunty Co's Kitchen" class="cta-bg-image">
+            <img src="images/beans.jpg" alt="Cozy dining atmosphere at Aunty Co's Kitchen" class="cta-bg-image">
             <div class="cta-overlay"></div>
         </div>
         <div class="container">

@@ -1,0 +1,8 @@
+# Allow all search engines to index everything
+User-agent: *
+Disallow: /admin/
+Disallow: /uploads/
+Disallow: /vendor/
+Disallow: /.env
+
+Sitemap: https://yourdomain.com/sitemap.xml
